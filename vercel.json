@@ -1,7 +1,5 @@
 {
-  "buildCommand": "vite build --emptyOutDir",
-  "outputDir": "src/dist",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/src/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
