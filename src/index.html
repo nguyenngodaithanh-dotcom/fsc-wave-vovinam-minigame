@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSC x Wave | F5 Night: Five Worlds Leaderboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vovinamBlue: '#004080',
+                        vovinamDarkBlue: '#00264d',
+                        vovinamGold: '#FFD700',
+                        vovinamRed: '#DC2626',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); }
+        .martial-glow { box-shadow: 0 0 25px rgba(0, 85, 165, 0.3), inset 0 0 15px rgba(255, 215, 0, 0.1); }
+        .gold-glow { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between selection:bg-vovinamGold selection:text-slate-900">
+
+    <header class="bg-gradient-to-r from-vovinamDarkBlue via-vovinamBlue to-vovinamDarkBlue border-b-2 border-vovinamGold shadow-2xl py-4 px-6 text-center relative overflow-hidden">
+        <div class="max-w-md mx-auto relative z-10">
+            <span class="bg-vovinamGold text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest shadow-md">F5 Night: Five Worlds</span>
+            <h1 class="text-2xl font-black mt-2 tracking-tight text-white drop-shadow-md">FSC x WAVE <span class="text-vovinamGold">VOVINAM</span></h1>
+            <p class="text-xs text-blue-200 mt-1 font-medium tracking-wide">Võ Đạo Sáng Tương Lai • Đấu Trường Vinh Quang</p>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto w-full p-4 flex-grow flex flex-col justify-center">
+        <!-- MÀN HÌNH ĐĂNG KÝ TÊN -->
+        <div id="screen-name" class="bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-6 text-center martial-glow backdrop-blur-md">
+            <div class="w-16 h-16 bg-gradient-to-br from-vovinamBlue to-vovinamDarkBlue rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl border-2 border-vovinamGold">
+                <span class="text-2xl">🥋</span>
+            </div>
+            <h2 class="text-xl font-black mb-2 text-white tracking-wide">ĐĂNG KÝ VẬN ĐỘNG VIÊN</h2>
+            <p class="text-xs text-slate-300 mb-5">Nhập tên của bạn để ghi danh vào Bảng Xếp Hạng sự kiện!</p>
+            <input type="text" id="player-name-input" placeholder="Ví dụ: Nguyễn Văn A..." maxlength="25" class="w-full bg-slate-950 border border-slate-700 focus:border-vovinamGold rounded-xl p-3 text-sm text-center text-white outline-none mb-4 shadow-inner">
+            <button onclick="submitPlayerName()" class="w-full bg-gradient-to-r from-yellow-500 via-vovinamGold to-yellow-600 hover:from-yellow-400 text-slate-950 font-black py-3.5 px-6 rounded-xl transition duration-200 shadow-xl gold-glow tracking-wider text-xs uppercase mb-3">
+                BẮT ĐẦU CHINH PHỤC 🚀
+            </button>
+            <button onclick="showLeaderboardModal()" class="w-full bg-slate-900/80 hover:bg-slate-900 text-vovinamGold border border-vovinamGold/40 font-bold py-2.5 px-4 rounded-xl text-xs transition">
+                🏆 Xem Bảng Xếp Hạng Public (Realtime)
+            </button>
+        </div>
+
+        <!-- MÀN HÌNH CHỌN 2 GAME -->
+        <div id="screen-select" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3">
+                <span id="welcome-player-tag" class="text-xs font-bold text-vovinamGold bg-slate-900/80 px-2.5 py-1 rounded-lg border border-vovinamBlue/30">VĐV: ...</span>
+                <span class="text-xs font-bold text-slate-400">Chọn 2/5 Thử Thách</span>
+            </div>
+            <h2 class="text-lg font-black mb-1 text-white tracking-wide">CHỌN 2 THẾ GIỚI THI ĐẤU</h2>
+            <div class="space-y-2 text-left mb-4">
+                <div onclick="toggleGameSelect(1)" id="card-game-1" class="cursor-pointer bg-slate-900/80 border border-slate-700 hover:border-vovinamGold p-2.5 rounded-xl transition flex items-center justify-between">
+                    <div class="flex items-center gap-2.5"><span class="text-lg">⚡</span><div><div class="text-xs font-bold text-slate-100">1. Phản Xạ Nhanh Lẹ (10s)</div></div></div>
+                    <input type="checkbox" id="chk-game-1" class="w-4 h-4 accent-yellow-400 pointer-events-none">
+                </div>
+                <div onclick="toggleGameSelect(2)" id="card-game-2" class="cursor-pointer bg-slate-900/80 border border-slate-700 hover:border-vovinamGold p-2.5 rounded-xl transition flex items-center justify-between">
+                    <div class="flex items-center gap-2.5"><span class="text-lg">📜</span><div><div class="text-xs font-bold text-slate-100">2. Trí Tuệ Võ Đạo</div></div></div>
+                    <input type="checkbox" id="chk-game-2" class="w-4 h-4 accent-yellow-400 pointer-events-none">
+                </div>
+                <div onclick="toggleGameSelect(3)" id="card-game-3" class="cursor-pointer bg-slate-900/80 border border-slate-700 hover:border-vovinamGold p-2.5 rounded-xl transition flex items-center justify-between">
+                    <div class="flex items-center gap-2.5"><span class="text-lg">🎯</span><div><div class="text-xs font-bold text-slate-100">3. Mắt Thần Võ Sĩ</div></div></div>
+                    <input type="checkbox" id="chk-game-3" class="w-4 h-4 accent-yellow-400 pointer-events-none">
+                </div>
+                <div onclick="toggleGameSelect(4)" id="card-game-4" class="cursor-pointer bg-slate-900/80 border border-slate-700 hover:border-vovinamGold p-2.5 rounded-xl transition flex items-center justify-between">
+                    <div class="flex items-center gap-2.5"><span class="text-lg">💥</span><div><div class="text-xs font-bold text-slate-100">4. Cuồng Phong Đấm Thần Tốc</div></div></div>
+                    <input type="checkbox" id="chk-game-4" class="w-4 h-4 accent-yellow-400 pointer-events-none">
+                </div>
+                <div onclick="toggleGameSelect(5)" id="card-game-5" class="cursor-pointer bg-slate-900/80 border border-slate-700 hover:border-vovinamGold p-2.5 rounded-xl transition flex items-center justify-between">
+                    <div class="flex items-center gap-2.5"><span class="text-lg">🧘</span><div><div class="text-xs font-bold text-slate-100">5. Thượng Võ Cân Bằng</div></div></div>
+                    <input type="checkbox" id="chk-game-5" class="w-4 h-4 accent-yellow-400 pointer-events-none">
+                </div>
+            </div>
+            <button id="btn-start-selected" onclick="startSelectedGames()" disabled class="w-full bg-slate-700 text-slate-400 font-black py-3 px-6 rounded-xl transition duration-200 shadow-xl tracking-wider text-xs uppercase cursor-not-allowed">HÃY CHỌN ĐỦ 2 GAME 🥋</button>
+        </div>
+
+        <!-- CÁC MÀN HÌNH GAME (1, 2, 3, 4, 5) & KẾT QUẢ -->
+        <div id="screen-game-1" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3 text-sm"><span class="font-extrabold text-vovinamGold">⚡ PHẢN XẠ 10 GIÂY</span><span id="g1-timer" class="bg-vovinamDarkBlue text-blue-200 border border-blue-500/40 px-3 py-1 rounded-lg text-xs font-bold">Thời gian: 10s</span></div>
+            <div id="g1-arena" class="relative w-full h-[280px] bg-slate-950/80 rounded-xl border-2 border-dashed border-vovinamBlue/40 overflow-hidden flex items-center justify-center">
+                <div id="g1-msg" class="text-slate-400 text-xs font-semibold pointer-events-none">Nhấn nút bên dưới để bắt đầu!</div>
+                <div id="g1-target" onclick="hitG1Target()" class="hidden absolute w-16 h-16 bg-gradient-to-br from-red-600 to-vovinamBlue rounded-full border-2 border-vovinamGold flex items-center justify-center cursor-pointer active:scale-90 transition-transform"><span class="text-xs font-black text-white">💥 ĐẤM</span></div>
+            </div>
+            <button id="btn-start-g1" onclick="runGame1()" class="mt-4 w-full bg-gradient-to-r from-blue-600 to-vovinamBlue text-white font-bold py-3 px-4 rounded-xl text-xs shadow-lg">SẴN SÀNG - BẮT ĐẦU!</button>
+        </div>
+
+        <div id="screen-game-2" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3 text-sm"><span class="font-extrabold text-vovinamGold">📜 TRÍ TUỆ VÕ ĐẠO</span><span id="quiz-progress" class="bg-vovinamDarkBlue text-blue-200 border border-blue-500/40 px-3 py-1 rounded-lg text-xs font-bold">Câu: 1/5</span></div>
+            <h3 id="quiz-question" class="text-sm font-bold mb-4 text-slate-100 min-h-[50px]">Đang tải...</h3>
+            <div id="quiz-options" class="space-y-2.5"></div>
+            <div id="quiz-feedback" class="mt-3 text-xs font-semibold text-center min-h-[24px]"></div>
+        </div>
+
+        <div id="screen-game-3" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3 text-sm"><span class="font-extrabold text-vovinamGold">🎯 MẮT THẦN VÕ SĨ</span><span id="g3-round" class="bg-vovinamDarkBlue text-blue-200 border border-blue-500/40 px-3 py-1 rounded-lg text-xs font-bold">Lượt: 1/3</span></div>
+            <div class="relative w-full h-[160px] bg-slate-950/80 rounded-xl border-2 border-vovinamBlue/40 overflow-hidden flex items-center justify-center mb-4">
+                <div class="w-16 h-full bg-vovinamGold/20 border-x-2 border-vovinamGold flex items-center justify-center"><span class="text-[10px] font-bold text-vovinamGold">TÂM</span></div>
+                <div id="g3-pointer" class="absolute top-0 bottom-0 w-3 bg-red-500 rounded-full left-0"></div>
+            </div>
+            <button id="btn-lock-g3" onclick="lockGame3()" class="w-full bg-gradient-to-r from-yellow-500 to-vovinamGold text-slate-950 font-black py-3 px-4 rounded-xl text-xs shadow-lg">🎯 ĐỊNH TÂM NGAY!</button>
+        </div>
+
+        <div id="screen-game-4" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3 text-sm"><span class="font-extrabold text-vovinamGold">💥 CUỒNG PHONG ĐẤM (5s)</span><span id="g4-timer" class="bg-vovinamDarkBlue text-blue-200 border border-blue-500/40 px-3 py-1 rounded-lg text-xs font-bold">Thời gian: 5s</span></div>
+            <div class="w-full bg-slate-950 h-7 rounded-full border border-slate-700 p-1 mb-3 overflow-hidden"><div id="g4-bar" class="bg-gradient-to-r from-blue-500 via-vovinamGold to-red-500 h-full rounded-full w-0"></div></div>
+            <div class="text-xs font-bold text-vovinamGold mb-4">Số cú đấm: <span id="g4-count">0</span></div>
+            <button onclick="hitGame4()" class="w-full bg-gradient-to-r from-red-600 via-vovinamBlue to-vovinamDarkBlue text-white font-black py-6 rounded-2xl text-base shadow-xl active:scale-95 transition-transform">💥 ĐẤM LIÊN HOÀN! 💥</button>
+        </div>
+
+        <div id="screen-game-5" class="hidden bg-slate-800/90 border-2 border-vovinamBlue/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <div class="flex justify-between items-center mb-3 text-sm"><span class="font-extrabold text-vovinamGold">🧘 THƯỢNG VÕ CÂN BẰNG (8s)</span><span id="g5-timer" class="bg-vovinamDarkBlue text-blue-200 border border-blue-500/40 px-3 py-1 rounded-lg text-xs font-bold">Thời gian: 8s</span></div>
+            <div class="relative w-full h-12 bg-slate-950 rounded-full border border-slate-700 p-1 mb-6 flex items-center">
+                <div class="absolute left-1/2 -translate-x-1/2 w-1/3 h-full bg-emerald-500/20 border-x-2 border-emerald-400 rounded-lg"></div>
+                <div id="g5-ball" class="absolute w-8 h-8 bg-vovinamGold rounded-full shadow-[0_0_12px_#ffd700] left-1/2 -translate-x-1/2"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button onmousedown="moveG5(-10)" ontouchstart="moveG5(-10)" class="bg-slate-700 active:bg-vovinamBlue text-white font-black py-4 rounded-xl text-xs">◄ SANG TRÁI</button>
+                <button onmousedown="moveG5(10)" ontouchstart="moveG5(10)" class="bg-slate-700 active:bg-vovinamBlue text-white font-black py-4 rounded-xl text-xs">SANG PHẢI ►</button>
+            </div>
+        </div>
+
+        <div id="screen-result" class="hidden bg-slate-800/90 border-2 border-vovinamGold/60 rounded-2xl p-5 text-center martial-glow backdrop-blur-md">
+            <h2 class="text-lg font-black text-vovinamGold mb-1 uppercase">HOÀN THÀNH XUẤT SẮC!</h2>
+            <div id="result-details" class="bg-slate-950/80 p-3 rounded-xl border border-vovinamBlue/40 text-left text-xs space-y-2 mb-4"></div>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="showLeaderboardModal()" class="bg-vovinamBlue text-white font-bold py-2.5 px-3 rounded-xl text-xs">🏆 Xem BXH</button>
+                <button onclick="location.reload()" class="bg-slate-700 text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs">Chơi lại ⟳</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL BXH -->
+    <div id="leaderboard-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-vovinamGold rounded-2xl max-w-sm w-full p-5 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                <h3 class="text-base font-black text-vovinamGold flex items-center gap-2">🏆 BXH REALTIME</h3>
+                <button onclick="closeLeaderboardModal()" class="text-slate-400 font-bold text-base px-2">✕</button>
+            </div>
+            <div id="leaderboard-list" class="space-y-2 max-h-60 overflow-y-auto mb-4 pr-1 text-xs"></div>
+            <div class="border-t border-slate-800 pt-3 mt-2 flex items-center justify-between">
+                <button onclick="handleReset()" class="text-[10px] text-slate-500 hover:text-rose-400">⚙️ Reset BXH</button>
+                <button onclick="closeLeaderboardModal()" class="bg-vovinamBlue text-white font-bold py-2 px-4 rounded-xl text-xs">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SCRIPT IMPORT -->
+    <script type="module">
+        import { saveScore, subscribeLeaderboard, resetLeaderboard } from './utils/leaderboard.js';
+
+        let playerName = "";
+        let selectedGameIds = [];
+        let currentGameIndex = 0;
+        let gameResults = [];
+
+        window.submitPlayerName = function() {
+            const name = document.getElementById('player-name-input').value.trim();
+            if (!name) return alert("Vui lòng nhập tên!");
+            playerName = name;
+            document.getElementById('welcome-player-tag').textContent = `VĐV: ${playerName}`;
+            document.getElementById('screen-name').classList.add('hidden');
+            document.getElementById('screen-select').classList.remove('hidden');
+        };
+
+        window.toggleGameSelect = function(id) {
+            const chk = document.getElementById(`chk-game-${id}`);
+            const card = document.getElementById(`card-game-${id}`);
+            if (selectedGameIds.includes(id)) {
+                selectedGameIds = selectedGameIds.filter(g => g !== id);
+                chk.checked = false;
+                card.classList.remove('border-vovinamGold', 'bg-vovinamBlue/20');
+            } else {
+                if (selectedGameIds.length >= 2) return;
+                selectedGameIds.push(id);
+                chk.checked = true;
+                card.classList.add('border-vovinamGold', 'bg-vovinamBlue/20');
+            }
+            const btn = document.getElementById('btn-start-selected');
+            if (selectedGameIds.length === 2) {
+                btn.disabled = false;
+                btn.className = "w-full bg-gradient-to-r from-yellow-500 to-vovinamGold text-slate-950 font-black py-3 px-6 rounded-xl shadow-xl gold-glow text-xs uppercase cursor-pointer";
+                btn.textContent = 'BẮT ĐẦU 2 THỬ THÁCH 🚀';
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full bg-slate-700 text-slate-400 font-black py-3 px-6 rounded-xl text-xs uppercase cursor-not-allowed";
+                btn.textContent = `ĐÃ CHỌN (${selectedGameIds.length}/2)`;
+            }
+        };
+
+        window.startSelectedGames = function() {
+            document.getElementById('screen-select').classList.add('hidden');
+            currentGameIndex = 0;
+            gameResults = [];
+            runNextGame();
+        };
+
+        function runNextGame() {
+            if (currentGameIndex >= selectedGameIds.length) {
+                showFinalResults();
+                return;
+            }
+            const gId = selectedGameIds[currentGameIndex];
+            if (gId === 1) initGame1();
+            if (gId === 2) initGame2();
+            if (gId === 3) initGame3();
+            if (gId === 4) initGame4();
+            if (gId === 5) initGame5();
+        }
+
+        // Logic Game 1
+        let g1Hits = 0, g1TimerId = null;
+        function initGame1() {
+            document.getElementById('screen-game-1').classList.remove('hidden');
+            document.getElementById('btn-start-g1').classList.remove('hidden');
+            document.getElementById('g1-msg').textContent = "Nhấn nút để bắt đầu!";
+            document.getElementById('g1-target').classList.add('hidden');
+            g1Hits = 0;
+        }
+        window.runGame1 = function() {
+            document.getElementById('btn-start-g1').classList.add('hidden');
+            document.getElementById('g1-msg').textContent = "";
+            g1Hits = 0; let timeLeft = 10; spawnG1Target();
+            g1TimerId = setInterval(() => {
+                timeLeft--;
+                document.getElementById('g1-timer').textContent = `Thời gian: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(g1TimerId);
+                    document.getElementById('g1-target').classList.add('hidden');
+                    let score = Math.min(100, g1Hits * 10);
+                    gameResults.push({ name: "1. Phản Xạ", score, text: `${score}/100đ` });
+                    setTimeout(() => { document.getElementById('screen-game-1').classList.add('hidden'); currentGameIndex++; runNextGame(); }, 1000);
+                }
+            }, 1000);
+        };
+        function spawnG1Target() {
+            const arena = document.getElementById('g1-arena');
+            const target = document.getElementById('g1-target');
+            target.style.left = Math.floor(Math.random() * (arena.clientWidth - 70)) + 'px';
+            target.style.top = Math.floor(Math.random() * (arena.clientHeight - 70)) + 'px';
+            target.classList.remove('hidden');
+        }
+        window.hitG1Target = function() { g1Hits++; spawnG1Target(); };
+
+        // Logic Game 2 (Trắc nghiệm)
+        const questions = [
+            { q: "Bài quyền nhập môn đầu tiên của Vovinam?", options: ["Nhập môn quyền", "Khởi quyền", "Thập tự quyền", "Long hổ quyền"], answer: 1 },
+            { q: "Vovinam do võ sư nào sáng lập?", options: ["Võ sư Nguyễn Lộc", "Võ sư Lê Sáng", "Võ sư Sáng Sáng", "Võ sư Trần Đế"], answer: 0 }
+        ];
+        let qIdx = 0, qScore = 0;
+        function initGame2() {
+            document.getElementById('screen-game-2').classList.remove('hidden');
+            qIdx = 0; qScore = 0; loadQuiz();
+        }
+        function loadQuiz() {
+            if (qIdx >= questions.length) {
+                let score = qScore * 50;
+                gameResults.push({ name: "2. Trí Tuệ", score, text: `${score}/100đ` });
+                setTimeout(() => { document.getElementById('screen-game-2').classList.add('hidden'); currentGameIndex++; runNextGame(); }, 1000);
+                return;
+            }
+            const data = questions[qIdx];
+            document.getElementById('quiz-progress').textContent = `Câu: ${qIdx + 1}/${questions.length}`;
+            document.getElementById('quiz-question').textContent = data.q;
+            const container = document.getElementById('quiz-options'); container.innerHTML = '';
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-slate-900 p-3 rounded-xl text-xs font-medium text-slate-200 border border-slate-700 mb-2";
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    if (i === data.answer) qScore++;
+                    qIdx++; loadQuiz();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // Logic Game 3, 4, 5 (Đơn giản hóa mẫu chạy nhanh)
+        function initGame3() {
+            gameResults.push({ name: "3. Định Tâm", score: 80, text: "80/100đ" });
+            setTimeout(() => { document.getElementById('screen-game-3').classList.add('hidden'); currentGameIndex++; runNextGame(); }, 500);
+        }
+        function initGame4() {
+            gameResults.push({ name: "4. Cuồng Phong", score: 90, text: "90/100đ" });
+            setTimeout(() => { document.getElementById('screen-game-4').classList.add('hidden'); currentGameIndex++; runNextGame(); }, 500);
+        }
+        function initGame5() {
+            gameResults.push({ name: "5. Cân Bằng", score: 85, text: "85/100đ" });
+            setTimeout(() => { document.getElementById('screen-game-5').classList.add('hidden'); currentGameIndex++; runNextGame(); }, 500);
+        }
+
+        function showFinalResults() {
+            document.getElementById('screen-result').classList.remove('hidden');
+            const details = document.getElementById('result-details'); details.innerHTML = '';
+            let total = 0;
+            gameResults.forEach(r => {
+                total += r.score;
+                details.innerHTML += `<div class="flex justify-between"><span>${r.name}:</span><span class="font-bold text-emerald-400">${r.text}</span></div>`;
+            });
+            details.innerHTML += `<div class="border-t border-slate-800 pt-2 flex justify-between font-bold text-vovinamGold"><span>Tổng điểm:</span><span>${total} điểm</span></div>`;
+            
+            // Đẩy điểm Realtime
+            saveScore(playerName, total);
+        }
+
+        window.showLeaderboardModal = function() {
+            document.getElementById('leaderboard-modal').classList.remove('hidden');
+            subscribeLeaderboard(list => {
+                const listEl = document.getElementById('leaderboard-list');
+                listEl.innerHTML = '';
+                if (list.length === 0) {
+                    listEl.innerHTML = `<div class="text-center text-slate-500">Chưa có dữ liệu!</div>`;
+                    return;
+                }
+                list.forEach((item, idx) => {
+                    listEl.innerHTML += `
+                        <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 text-yellow-400 font-bold">#${idx + 1}</span>
+                                <span class="font-bold text-white">${item.name}</span>
+                            </div>
+                            <span class="font-bold text-vovinamGold">${item.score} đ</span>
+                        </div>`;
+                });
+            });
+        };
+
+        window.closeLeaderboardModal = function() { document.getElementById('leaderboard-modal').classList.add('hidden'); };
+        window.handleReset = async function() {
+            const pwd = prompt("Nhập mật khẩu quản trị:");
+            if (!pwd) return;
+            const res = await resetLeaderboard(pwd);
+            alert(res.message);
+        };
+    </script>
+</body>
+</html>
